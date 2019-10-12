@@ -1,0 +1,27 @@
+{
+    "name": "lof/module-producttagsgraphql",
+    "description": "N/A",
+    "type": "magento2-module",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Landofcoder",
+            "email": "landofcoder@gmail.com",
+            "homepage": "https://landofcoder.com",
+            "role": "Magento 2 Extension Provider"
+        }
+    ],
+    "require": {
+        "landofcoder/module-all" : "1.*"
+      },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Lof\\ProductTagsGraphQl\\": ""
+        }
+    }
+}
