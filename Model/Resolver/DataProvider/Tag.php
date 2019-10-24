@@ -31,13 +31,13 @@ class Tag
     }
 
     /**
-     * @param int $tagId
+     * @param string $tagsId
      * @return array
      * @throws NoSuchEntityException
      */
-    public function getData(int $tagId): array
+    public function getData(string $tagsId): array
     {
-        $tag = $this->tagRepository->getById($tagId);
+        $tag = $this->tagRepository->getById($tagsId);
 
         if (false === $tag->getStatus()) {
             throw new NoSuchEntityException();

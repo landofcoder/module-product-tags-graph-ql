@@ -23,7 +23,7 @@ class Tag implements ResolverInterface
     private $tagDataProvider;
 
     /**
-     * @param DataProvider\Tag $tagRepository
+     * @param DataProvider\Tag $tagDataProvider
      */
     public function __construct(DataProvider\Tag $tagDataProvider)
     {
@@ -40,38 +40,43 @@ class Tag implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $tagId = $this->getTagId($args);
-        $tagData = $this->getTagData($tagId);
-
-        return $tagData;
+        $tagsId = $this->getTagId($args);
+        $tagsData = $this->getTagData($tagsId);
+        $resultData = [
+            'items' => $tagsData,
+        ];
+        return $resultData;
     }
 
     /**
      * @param array $args
-     * @return int
+     * @return string[]
      * @throws GraphQlInputException
      */
-    private function getTagId(array $args): int
+    private function getTagId(array $args): array
     {
         if (!isset($args['id'])) {
             throw new GraphQlInputException(__('"Tag id should be specified'));
         }
 
-        return (int)$args['id'];
+        return (array)$args['id'];
     }
 
     /**
-     * @param int $tagId
+     * @param array $tagsId
      * @return array
      * @throws GraphQlNoSuchEntityException
      */
-    private function getTagData(int $tagId): array
+    private function getTagData(array $tagsId): array
     {
-        try {
-            $tagData = $this->tagDataProvider->getData($tagId);
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+        $tagsData = [];
+        foreach ($tagsId as $tagId) {
+            try {
+                $tagsData[$tagId] = $this->tagDataProvider->getData($tagId);
+            } catch (NoSuchEntityException $e) {
+                $tagsData[$tagId] = new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+            }
         }
-        return $tagData;
+        return $tagsData;
     }
 }
