@@ -23,21 +23,29 @@ class Tag
 
     /**
      * @param \Lof\ProductTags\Api\TagRepositoryInterface $tagRepository
+     * @param \Lof\ProductTags\Model\TagFactory $tagModelFactory
      */
     public function __construct(
+        \Lof\ProductTags\Model\TagFactory $tagModelFactory,
         \Lof\ProductTags\Api\TagRepositoryInterface $tagRepository
     ) {
         $this->tagRepository = $tagRepository;
+        $this->_tagModelFactory = $tagModelFactory;
     }
 
     /**
-     * @param string $tagsId
+     * @param string $tagsIdentifier
      * @return array
      * @throws NoSuchEntityException
      */
-    public function getData(string $tagsId): array
+    public function getData(string $tagsIdentifier): array
     {
-        $tag = $this->tagRepository->getById($tagsId);
+        $tagModel = $this->_tagModelFactory->create();
+        $tagModel->loadByIdentifier($tagsIdentifier);
+        if (!$tagModel->getId()) {
+            return [];
+        }
+        $tag = $this->tagRepository->getById($tagModel->getId());
 
         if (false === $tag->getStatus()) {
             throw new NoSuchEntityException();

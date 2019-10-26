@@ -69,17 +69,16 @@ class Product
                 $productData->setSku($product->getSku())
                     ->setPosition($product->getData('tag_index_position'))
                     ->setTagId($tagModel->getId());
-                $productData = [
-                    TagProductLinkInterface::KEY_SKU => $product->getSku(),
-                    TagProductLinkInterface::KEY_POSITION => $product->getPosition(),
-                    TagProductLinkInterface::KEY_TAG_ID => $product->getTagId(),   
+                $productsData = [
+                    TagProductLinkInterface::KEY_SKU => $productData->getSku(),
+                    TagProductLinkInterface::KEY_POSITION => $productData->getPosition(),
+                    TagProductLinkInterface::KEY_TAG_ID => $productData->getTagId(),   
                 ];
                 // $productData->setSku($product->getSku())
                 //     ->setPosition($product->getData('tag_index_position'))
                 //     ->setTagId($tagModel->getId());
-                $productsData[] = $productData;
-                return $productsData;
             }
+            return $productsData;
         }
         // $product = $this->productsManagement->getProducts($tagCode);
 

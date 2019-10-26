@@ -40,8 +40,8 @@ class Tag implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $tagsId = $this->getTagId($args);
-        $tagsData = $this->getTagData($tagsId);
+        $tagsIdentifier = $this->getTagIdentifier($args);
+        $tagsData = $this->getTagData($tagsIdentifier);
         $resultData = [
             'items' => $tagsData,
         ];
@@ -49,32 +49,45 @@ class Tag implements ResolverInterface
     }
 
     /**
-     * @param array $args
+     * @param string $args
      * @return string[]
      * @throws GraphQlInputException
      */
-    private function getTagId(array $args): array
+    private function getTagIdentifier(string $args): array
     {
-        if (!isset($args['id'])) {
-            throw new GraphQlInputException(__('"Tag id should be specified'));
+        if (!isset($args['identifiers']) || !is_array($args['identifiers']) || count($args['identifiers']) === 0) {
+            throw new GraphQlInputException(__('"identifiers" of Tag should be specified'));
         }
 
-        return (array)$args['id'];
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); // Instance of object manager
+		$resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
+		$connection = $resource->getConnection();
+		$tableName = $resource->getTableName('lof_producttags_tag');
+        $select = $connection->select()->from(
+            $tableName,
+            'identifier'
+            )
+        ->where(
+            'identifier'
+            )
+        ->like($args['identifiers']);
+        return $select;
     }
 
     /**
-     * @param array $tagsId
+     * @param array $tagsIdentifier
      * @return array
      * @throws GraphQlNoSuchEntityException
      */
-    private function getTagData(array $tagsId): array
+    private function getTagData(array $tagsIdentifier): array
     {
         $tagsData = [];
-        foreach ($tagsId as $tagId) {
+
+        foreach ($tagsIdentifier as $tagIdentifier) {
             try {
-                $tagsData[$tagId] = $this->tagDataProvider->getData($tagId);
+                $tagsData[$tagIdentifier] = $this->tagDataProvider->getData($tagIdentifier);
             } catch (NoSuchEntityException $e) {
-                $tagsData[$tagId] = new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+                $tagsData[$tagIdentifier] = new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
             }
         }
         return $tagsData;
