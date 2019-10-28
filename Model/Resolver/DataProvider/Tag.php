@@ -40,12 +40,7 @@ class Tag
      */
     public function getData(string $tagsIdentifier): array
     {
-        $tagModel = $this->_tagModelFactory->create();
-        $tagModel->loadByIdentifier($tagsIdentifier);
-        if (!$tagModel->getId()) {
-            return [];
-        }
-        $tag = $this->tagRepository->getById($tagModel->getId());
+        $tag = $this->tagRepository->getById($tagsIdentifier);
 
         if (false === $tag->getStatus()) {
             throw new NoSuchEntityException();
@@ -57,6 +52,7 @@ class Tag
             TagInterface::TAG_TITLE => $tag->getTagTitle(),
             TagInterface::TAG_IDENTIFIER => $tag->getIdentifier(),
             TagInterface::TAG_DESCRIPTION => $tag->getTagDescription(),
+            TagInterface::STORE_ID => $tag->getStoreId(),
         ];
         return $tagData;
     }

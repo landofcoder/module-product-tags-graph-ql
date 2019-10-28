@@ -49,29 +49,23 @@ class Tag implements ResolverInterface
     }
 
     /**
-     * @param string $args
+     * @param array $args
      * @return string[]
      * @throws GraphQlInputException
      */
-    private function getTagIdentifier(string $args): array
+    private function getTagIdentifier(array $args): array
     {
-        if (!isset($args['identifiers']) || !is_array($args['identifiers']) || count($args['identifiers']) === 0) {
-            throw new GraphQlInputException(__('"identifiers" of Tag should be specified'));
+        if (!isset($args['identifiers'])||!isset($args['tag_id'])||!isset($args['tag_title'])||!isset($args['status'])) {
+            throw new GraphQlInputException(__('"identifiers", "tag_id", "tag_title" or "status" of Tag should be specified'));
         }
-
+        //return (array)$args['identifiers'];
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance(); // Instance of object manager
 		$resource = $objectManager->get('Magento\Framework\App\ResourceConnection');
 		$connection = $resource->getConnection();
 		$tableName = $resource->getTableName('lof_producttags_tag');
-        $select = $connection->select()->from(
-            $tableName,
-            'identifier'
-            )
-        ->where(
-            'identifier'
-            )
-        ->like($args['identifiers']);
-        return $select;
+        $sql = "Select lof_producttags_tag.tag_id FROM lof_producttags_tag INNER JOIN lof_producttags_store ON lof_producttags_tag.tag_id = lof_producttags_store.tag_id WHERE lof_producttags_tag.identifier LIKE '%" . $args['identifiers'] . "%' AND lof_producttags_tag.tag_id LIKE '%" . $args['tag_id'] . "%' AND lof_producttags_tag.status = true AND lof_producttags_tag.tag_title LIKE '%" . $args['tag_title'] . "%';";
+        $result = $connection->fetchCol($sql);
+        return $result;
     }
 
     /**
@@ -81,8 +75,8 @@ class Tag implements ResolverInterface
      */
     private function getTagData(array $tagsIdentifier): array
     {
-        $tagsData = [];
-
+        $tagsData = []; 
+        //$tagsIdentifier = ['test-2', 'test-3', 'test-4', 'test-5'];
         foreach ($tagsIdentifier as $tagIdentifier) {
             try {
                 $tagsData[$tagIdentifier] = $this->tagDataProvider->getData($tagIdentifier);

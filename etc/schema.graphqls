@@ -2,7 +2,10 @@
 type Query {
     
     tag (
-            identifiers: FilterTypeInput @doc(description: "Query by tag_id.")
+            identifiers: String @doc(description: "Query by identifier."),
+            tag_id: String @doc(description: "Query by tag_id."),
+            tag_title: String @doc(description: "Query by tag_title."),
+            status: Boolean @doc(description: "Query by status.")
     ) : Tag @resolver( class: "Lof\\ProductTagsGraphQl\\Model\\Resolver\\Tag")  ,
     product (
             identifiers: [String] @doc(description: "Query by identifier.")
@@ -20,6 +23,7 @@ type TagsData {
     tag_description  : String  @doc(description: "Query by  tag_description.") ,
     number_products  : Int  @doc(description: "Query by  number_products.") ,
     create_at  : String  @doc(description: "Query by  create_at.") ,
+    store_id  : [Int]  @doc(description: "Query by  store_id.") ,
 }
 
 type Product {
