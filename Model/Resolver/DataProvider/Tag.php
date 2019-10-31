@@ -23,22 +23,23 @@ class Tag
 
     /**
      * @param \Lof\ProductTags\Api\TagRepositoryInterface $tagRepository
+     * @param \Lof\ProductTags\Model\TagFactory $tagModelFactory
      */
     public function __construct(
+        \Lof\ProductTags\Model\TagFactory $tagModelFactory,
         \Lof\ProductTags\Api\TagRepositoryInterface $tagRepository
     ) {
         $this->tagRepository = $tagRepository;
+        $this->_tagModelFactory = $tagModelFactory;
     }
 
     /**
-     * @param int $tagId
+     * @param Lof\ProductTags\Model\Tag $tag
      * @return array
      * @throws NoSuchEntityException
      */
-    public function getData(int $tagId): array
+    public function getData( $tag): array
     {
-        $tag = $this->tagRepository->getById($tagId);
-
         if (false === $tag->getStatus()) {
             throw new NoSuchEntityException();
         }
@@ -49,6 +50,7 @@ class Tag
             TagInterface::TAG_TITLE => $tag->getTagTitle(),
             TagInterface::TAG_IDENTIFIER => $tag->getIdentifier(),
             TagInterface::TAG_DESCRIPTION => $tag->getTagDescription(),
+            TagInterface::STORE_ID => $tag->getStoreId(),
         ];
         return $tagData;
     }

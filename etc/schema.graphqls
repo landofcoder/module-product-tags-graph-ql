@@ -2,14 +2,19 @@
 type Query {
     
     tag (
-            id: Int @doc(description: "Query by id.")
+            identifiers: String @doc(description: "Query by identifier."),
+            tag_id: String @doc(description: "Query by tag_id."),
+            tag_title: String @doc(description: "Query by tag_title."),
+            status: Boolean @doc(description: "Query by status.")
     ) : Tag @resolver( class: "Lof\\ProductTagsGraphQl\\Model\\Resolver\\Tag")  ,
     product (
-            product_id: Int @doc(description: "Query by product_id.")
+            identifiers: [String] @doc(description: "Query by identifier.")
     ) : Product @resolver( class: "Lof\\ProductTagsGraphQl\\Model\\Resolver\\Product")  ,
 }
-
 type Tag {
+    items: [TagsData] @doc(description: "An array information Tags.")
+}
+type TagsData {
     tag_id  : Int  @doc(description: "Query by tag_id.") ,
     status  : Boolean  @doc(description: "Query by status.") ,
     tag_title  : String  @doc(description: "Query by  tag_title.") ,
@@ -18,10 +23,11 @@ type Tag {
     tag_description  : String  @doc(description: "Query by  tag_description.") ,
     number_products  : Int  @doc(description: "Query by  number_products.") ,
     create_at  : String  @doc(description: "Query by  create_at.") ,
+    store_id  : [Int]  @doc(description: "Query by  store_id.") ,
 }
 
 type Product {
     tag_id  : Int  @doc(description: "Query by tag_id.") ,
-    product_id  : Int  @doc(description: "Query by  product_id.") ,
+    sku : String  @doc(description: "Query by sku.") ,
     position  : Int  @doc(description: "Query by  position.") ,
 }
