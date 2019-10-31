@@ -34,14 +34,12 @@ class Tag
     }
 
     /**
-     * @param string $tagsIdentifier
+     * @param Lof\ProductTags\Model\Tag $tag
      * @return array
      * @throws NoSuchEntityException
      */
-    public function getData(string $tagsIdentifier): array
+    public function getData( $tag): array
     {
-        $tag = $this->tagRepository->getById($tagsIdentifier);
-
         if (false === $tag->getStatus()) {
             throw new NoSuchEntityException();
         }
