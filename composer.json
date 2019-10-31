@@ -1,21 +1,20 @@
 {
-    "name": "lof/module-producttagsgraphql",
-    "description": "N/A",
+    "name": "landofcoder/module-product-tags-graph-ql",
+    "description": "Assign one or multiple tags to your products and improve the navigation for your customers, who can narrow the search results by tags in the Product Filters or, vice versa, see all products with the tags graph ql",
     "type": "magento2-module",
     "license": "MIT",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "authors": [
         {
             "name": "Landofcoder",
             "email": "landofcoder@gmail.com",
             "homepage": "https://landofcoder.com",
-            "role": "Magento 2 Extension Provider"
+            "role": "Magento 2 Extension product tags graph ql"
         }
     ],
     "version: "1.0.0",
     "require": {
-        "landofcoder/module-all" : "1.*"
+        "landofcoder/module-all" : "1.*",
+        "landofcoder/module-product-tags" : "1.*"
       },
     "autoload": {
         "files": [
