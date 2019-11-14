@@ -1,5 +1,7 @@
 # Mage2 Module Lof ProductTagsGraphQl
 
+![Landofcoder Black Friday Sale Upto 50%](https://landofcoder.com/media/wysiwyg/slideshow/black-friday-2019.png)
+
     ``lof/module-producttagsgraphql``
 
  - [Main Functionalities](#markdown-header-main-functionalities)
